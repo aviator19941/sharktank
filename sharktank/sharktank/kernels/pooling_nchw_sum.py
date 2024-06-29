@@ -46,24 +46,27 @@ class pooling_nchw_sum(CustomOp):
         strides = ksel.arg_descs[2].v
         dilations = ksel.arg_descs[3].v
         result_desc = ksel.result_descs[0].t.shape
-        H_out = result_desc[2]
-        W_out = result_desc[3]
+        N_out, C_out, H_out, W_out = result_desc
 
         weights = [str(i) for i in weights]
         strides = [str(i) for i in strides]
         dilations = [str(i) for i in dilations]
+        N_out = str(N_out)
+        C_out = str(C_out)
         H_out = str(H_out)
         W_out = str(W_out)
 
         dtype_str = str(inputs_tensor_type.element_type)
 
         template_file = "pooling_nchw_sum.mlir"
-        target_function_name = f"sharktank_pooling_nchw_sum_{strides[0]}_{strides[1]}_{dilations[0]}_{dilations[1]}_{dtype_str}"
+        target_function_name = f"sharktank_pooling_nchw_sum_{N_out}x{C_out}x{H_out}x{W_out}_{weights[0]}x{weights[1]}_{strides[0]}_{strides[1]}_{dilations[0]}_{dilations[1]}_{dtype_str}"
 
         target_function = inline_template_function(
             kb,
             template_file,
             target_function_name,
+            N_out=N_out,
+            C_out=C_out,
             H_out=H_out,
             W_out=W_out,
             weights_H=weights[0],

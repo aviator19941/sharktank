@@ -11,7 +11,7 @@
 
 module {
 
-util.func private @sharktank_pooling_nchw_sum_{{strides_H}}_{{strides_W}}_{{dilations_H}}_{{dilations_W}}_{{dtype}} (
+util.func private @sharktank_pooling_nchw_sum_{{N_out}}x{{C_out}}x{{H_out}}x{{W_out}}_{{weights_H}}x{{weights_W}}_{{strides_H}}_{{strides_W}}_{{dilations_H}}_{{dilations_W}}_{{dtype}} (
     %input_pad: !dynamic_tensor_type)
     -> !out_tensor_type {
   %zero = arith.constant 0: !dtype

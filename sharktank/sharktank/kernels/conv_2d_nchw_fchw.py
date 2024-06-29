@@ -65,23 +65,26 @@ class conv_2d_nchw_fchw(CustomOp):
         strides = ksel.arg_descs[3].v
         dilations = ksel.arg_descs[4].v
         result_desc = ksel.result_descs[0].t.shape
-        H_out = result_desc[2]
-        W_out = result_desc[3]
+        N_out, F_out, H_out, W_out = result_desc
 
         strides = [str(i) for i in strides]
         dilations = [str(i) for i in dilations]
+        N_out = str(N_out)
+        F_out = str(F_out)
         H_out = str(H_out)
         W_out = str(W_out)
 
         dtype_str = str(inputs_tensor_type.element_type)
 
         template_file = "conv_2d_nchw_fchw.mlir"
-        target_function_name = f"sharktank_conv_2d_nchw_fchw_{strides[0]}_{strides[1]}_{dilations[0]}_{dilations[1]}_{dtype_str}"
+        target_function_name = f"sharktank_conv_2d_nchw_fchw_{N_out}x{F_out}x{H_out}x{W_out}_{strides[0]}_{strides[1]}_{dilations[0]}_{dilations[1]}_{dtype_str}"
 
         target_function = inline_template_function(
             kb,
             template_file,
             target_function_name,
+            N_out=N_out,
+            F_out=F_out,
             H_out=H_out,
             W_out=W_out,
             strides_H=strides[0],

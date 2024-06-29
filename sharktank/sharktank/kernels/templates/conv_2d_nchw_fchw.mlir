@@ -13,7 +13,7 @@
 
 module {
 
-util.func private @sharktank_conv_2d_nchw_fchw_{{strides_H}}_{{strides_W}}_{{dilations_H}}_{{dilations_W}}_{{dtype}} (
+util.func private @sharktank_conv_2d_nchw_fchw_{{N_out}}x{{F_out}}x{{H_out}}x{{W_out}}_{{strides_H}}_{{strides_W}}_{{dilations_H}}_{{dilations_W}}_{{dtype}} (
     %input_pad: !dynamic_tensor_type, %weights: !dynamic_tensor_type, %bias: tensor<?x!dtype>)
     -> !out_tensor_type {
   %zero = arith.constant 0: !dtype

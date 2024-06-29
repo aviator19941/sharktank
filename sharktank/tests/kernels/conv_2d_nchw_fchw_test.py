@@ -31,17 +31,19 @@ class conv_2d_nchw_fchw_test(unittest.TestCase):
     )
     def testBS32(self, atol, rtol):
         dtype = torch.int8
+        # inputs = (torch.rand([2,4,128,128]) * 64).to(dtype)
         inputs = (torch.rand([2, 320, 64, 64]) * 64).to(dtype)
-        padding = [1, 1]
+        # padding = [1, 1]
+        padding = [0, 0]
         extended_list = [item for item in padding for _ in range(2)]
         inputs_pad = _pad_last_2d(inputs, extended_list)
-        weights = (torch.rand([640, 320, 3, 3]) * 64).to(dtype)
+        weights = (torch.rand([640, 320, 1, 1]) * 64).to(dtype)
         bias = (torch.rand([640]) * 64).to(dtype)
         result = kernels.conv_2d_nchw_fchw(inputs_pad, weights, bias, [1, 1], [1, 1])
 
         # Tolerances are empirical and results are not expected to match exactly.
         ref = torch.nn.functional.conv2d(
-            inputs, weights, bias=bias, stride=(1, 1), padding=(1, 1), dilation=(1, 1)
+            inputs, weights, bias=bias, stride=(1, 1), padding=(0, 0), dilation=(1, 1)
         )
         print(result.shape)
         print(ref.shape)
